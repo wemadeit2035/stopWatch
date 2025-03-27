@@ -1,4 +1,4 @@
-        let timer;
+let timer;
         let isRunning = false;
         let seconds = 0, minutes = 0, hours = 0;
         let lapCount = 1;
@@ -18,28 +18,39 @@
         function resetTimer() {
             isRunning = false;
             clearInterval(timer);
-            seconds = 0; minutes = 0; hours = 0; lapCount = 1;
-            document.getElementById("display").innerText = "00:00:00";
+            seconds = 0;
+            minutes = 0;
+            hours = 0;
+            lapCount = 1;
+            document.getElementById("display").textContent = "00:00:00";
             document.getElementById("laps").innerHTML = "";
         }
 
         function updateTime() {
             seconds++;
-            if (seconds == 60) { seconds = 0; minutes++; }
-            if (minutes == 60) { minutes = 0; hours++; }
-            document.getElementById("display").innerText =
-                (hours < 10 ? "0" : "") + hours + ":" +
-                (minutes < 10 ? "0" : "") + minutes + ":" +
-                (seconds < 10 ? "0" : "") + seconds;
+            if (seconds === 60) {
+                seconds = 0;
+                minutes++;
+            }
+            if (minutes === 60) {
+                minutes = 0;
+                hours++;
+            }
+            
+            const display = document.getElementById("display");
+            display.textContent = 
+                `${String(hours).padStart(2, '0')}:` +
+                `${String(minutes).padStart(2, '0')}:` +
+                `${String(seconds).padStart(2, '0')}`;
         }
 
         function recordLap() {
             if (isRunning) {
-                const lapTime = document.getElementById("display").innerText;
-                const lapList = document.getElementById("laps");
+                const lapsContainer = document.getElementById("laps");
+                const lapTime = document.getElementById("display").textContent;
                 const lapItem = document.createElement("div");
-                lapItem.innerText = `Lap ${lapCount}: ${lapTime}`;
-                lapList.appendChild(lapItem);
-                lapCount++;
+                lapItem.className = "lap-item";
+                lapItem.textContent = `Lap ${lapCount++}: ${lapTime}`;
+                lapsContainer.prepend(lapItem);
             }
         }
